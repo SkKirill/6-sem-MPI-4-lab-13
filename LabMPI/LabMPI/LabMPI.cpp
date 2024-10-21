@@ -120,13 +120,22 @@ int main(int argc, char* argv[]) {
 
 	if (rank == 0)
 	{
+		MPI_Send(array, rows * cols, MPI_INT, 1, 0, MPI_COMM_WORLD);
 		MPI_Send(array, 1, MyDataType, 1, 0, MPI_COMM_WORLD); // первым процессом отправляем нашу матрицу преобразованную в наш тип
 	}
 	else if (rank == 1) // Процесс с рангом 1 принимает данные, отправленные процессом с рангом 0, используя пользовательский тип данных MyDataType
 	{
-		MPI_Recv(array, 1, MyDataType, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		MPI_Recv(array, rows * cols, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-		printArray(array, rows); // после чего выводим матрицу
+		printf("init:\n");
+		printArray(array, rows);
+
+		int arr[rows][cols]{};
+
+		MPI_Recv(arr, 1, MyDataType, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		
+		printf("changes:\n");
+		printArray(arr, rows); // после чего выводим матрицу
 	}
 
 	MPI_Type_free(&MyDataType); //Освобождает ресурсы, связанные с пользовательским типом данных MyDataType.
