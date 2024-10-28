@@ -130,7 +130,7 @@ int main(int argc, char* argv[]) {
 		MPI_Recv(array, 1, MyDataType, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		
 		printf("changes:\n");
-		printArray(arr, rows); // после чего выводим матрицу
+		printArray(array, rows); // после чего выводим матрицу
 	}
 
 	MPI_Type_free(&MyDataType); //Освобождает ресурсы, связанные с пользовательским типом данных MyDataType.
